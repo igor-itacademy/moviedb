@@ -34,7 +34,7 @@ def login_page(request):
 		if form.is_valid():
 			cd = form.cleaned_data
 
-	context = {}
+	context = {'form': form}
 	return render(request, 'movies/login_page.html', context)
 
 

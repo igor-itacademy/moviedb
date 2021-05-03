@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'crispy_forms',
+    'widget_tweaks',
     'django.contrib.staticfiles',
     'movies',
 ]
