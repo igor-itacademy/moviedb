@@ -1,0 +1,52 @@
+{% extends '_base.html' %}
+
+{% block content %}
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-8 col-xl-6">
+      	<form action="" method="POST">
+      		{% csrf_token %}
+	        <div class="row">
+	          <div class="col text-center">
+	            <h1>Log in</h1>
+	          </div>
+	        </div>
+	        <div class="row align-items-center">
+	          <div class="col mt-4">
+	            <!-- <input type="text" class="form-control" placeholder="Your name"> -->
+	            {{form.username}}
+	          </div>
+	        </div>
+	        <div class="row align-items-center mt-4">
+	          <div class="col">
+	            <!-- <input type="email" class="form-control" placeholder="Email"> -->
+	            {{form.email}}
+	          </div>
+	        </div>
+	        <div class="row align-items-center mt-4">
+	          <div class="col">
+	            <!-- <input type="password" class="form-control" placeholder="Password"> -->
+	            {{form.password1}}
+	          </div>
+	          <div class="col">
+	            <!-- <input type="password" class="form-control" placeholder="Confirm Password"> -->
+	            {{form.password2}}
+	          </div>
+	        </div>
+	        {% if form.errors %}
+	        <div class="row align-items-center mt-4">
+	        	<div class="col">
+	        		<div class="alert alert-danger" role="alert">
+        		 		Username or password is not correct
+        			</div>
+	        	</div>
+	        </div>
+	        {% endif %}
+	        <div class="row justify-content-start mt-4">
+	          <div class="col">
+	            <input type="submit" class="btn btn-primary mt-4" value="Войти">
+	          </div>
+	        </div>
+      	</form>
+      </div>
+    </div>
+{% endblock content %}
