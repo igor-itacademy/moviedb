@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
 from .forms import CreateUserForm, SecondCreateUserForm, LoginForm
+from django.contrib.auth import authenticate, login, logout
 
 
 def registration_page(request):
@@ -30,13 +30,20 @@ def second_registration_page(request):
 def login_page(request):
 	form = LoginForm()
 	if request.method == 'POST':
-		form = LoginForm(request.POST)
+		form = LoginForm(data =request.POST)
 		if form.is_valid():
 			cd = form.cleaned_data
+			user = authenticate(username = cd['username'], password = cd['password'])
+			if user is not None:
+				login(request, user)
+				return redirect(list_movies)
 
 	context = {'form': form}
 	return render(request, 'movies/login_page.html', context)
 
+def logout_page(request):
+	logout(request)
+	return redirect('login_page')
 
 def list_movies(request):
 	context = {}
