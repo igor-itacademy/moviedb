@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import CreateUserForm, SecondCreateUserForm, LoginForm
+from .forms import CreateUserForm, SecondCreateUserForm, LoginForm, ContactUsForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -60,6 +60,11 @@ def logout_page(request):
 def user_comments(request):
 	context = {}
 	return render(request, 'users/user_comments.html', context)
+
+def test_email(request):
+	form = ContactUsForm()
+	context = {'form': form}
+	return render(request, 'users/test_email.html', context)
 
 
 def list_movies(request):

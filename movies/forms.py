@@ -30,3 +30,9 @@ class LoginForm(AuthenticationForm):
 	password = forms.CharField(widget = forms.PasswordInput(attrs = {
 		'placeholder': 'Password'
 		}))
+
+
+class ContactUsForm(forms.Form):
+	sender_name = forms.CharField(widget=forms.TextInput())
+	sender_email = forms.CharField(widget=forms.EmailInput())
+	sender_message = forms.CharField(widget=forms.Textarea(attrs={'rows': 8}))
