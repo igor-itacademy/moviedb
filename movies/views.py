@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import CreateUserForm, SecondCreateUserForm, LoginForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-
+from django.contrib.auth.decorators import login_required
 
 def users_list(request):
 	all_users = User.objects.all()
@@ -50,9 +50,17 @@ def login_page(request):
 	context = {'form': form}
 	return render(request, 'movies/login_page.html', context)
 
+
 def logout_page(request):
 	logout(request)
 	return redirect('login_page')
+
+
+@login_required(login_url='login_page')
+def user_comments(request):
+	context = {}
+	return render(request, 'users/user_comments.html', context)
+
 
 def list_movies(request):
 	context = {}
