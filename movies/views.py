@@ -1,6 +1,15 @@
 from django.shortcuts import render, redirect
 from .forms import CreateUserForm, SecondCreateUserForm, LoginForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+
+
+def users_list(request):
+	all_users = User.objects.all()
+	context = {
+		'all_users': all_users
+	}
+	return render(request, 'users/user_list.html', context)
 
 
 def registration_page(request):
