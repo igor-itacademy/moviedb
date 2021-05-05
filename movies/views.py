@@ -3,6 +3,8 @@ from .forms import CreateUserForm, SecondCreateUserForm, LoginForm, ContactUsFor
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
 
 def users_list(request):
 	all_users = User.objects.all()
@@ -63,6 +65,21 @@ def user_comments(request):
 
 def test_email(request):
 	form = ContactUsForm()
+	if request.method == 'POST':
+		form = ContactUsForm(request.POST)
+		if form.is_valid():
+			sender_email = form.cleaned_data['sender_email']
+			sender_name = form.cleaned_data['sender_name']
+			email_template =render_to_string('users/contact_form_email_answer.html', {'sender_name': sender_name})
+			email = EmailMessage(
+				'Спасибо за отзыв',
+				email_template,
+				'from@example.com',
+				[sender_email],
+			)
+			email.fail_silently=False
+			email.send()
+			return redirect('list_movies')
 	context = {'form': form}
 	return render(request, 'users/test_email.html', context)
 
