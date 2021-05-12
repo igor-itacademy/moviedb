@@ -63,7 +63,7 @@ def user_comments(request):
 	context = {}
 	return render(request, 'users/user_comments.html', context)
 
-def test_email(request):
+def contact_page(request):
 	form = ContactUsForm()
 	if request.method == 'POST':
 		form = ContactUsForm(request.POST)
@@ -81,7 +81,7 @@ def test_email(request):
 			email.send()
 			return redirect('list_movies')
 	context = {'form': form}
-	return render(request, 'users/test_email.html', context)
+	return render(request, 'users/contact_page.html', context)
 
 
 def list_movies(request):
