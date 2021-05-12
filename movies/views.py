@@ -6,6 +6,11 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.contrib import messages
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from .tokens import registration_activation_token
+
 
 def users_list(request):
 	all_users = User.objects.all()
@@ -24,7 +29,14 @@ def registration_page(request):
 			user.is_active = False
 			email_to = user.email
 			name = user.username
-			email_template =render_to_string('users/confirmation_email.html', {'name': name})
+			user.save()
+			email_template =render_to_string('users/confirmation_email.html', 
+				{
+					'name': name,
+					'domain': get_current_site(request).domain,
+					'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+					'token': registration_activation_token.make_token(user),
+				})
 			email = EmailMessage(
 				'Подтвердите регистрацию',
 				email_template,
@@ -33,13 +45,21 @@ def registration_page(request):
 			)
 			email.fail_silently=False
 			email.send()
-			user.save()
 			messages.info(request, "Please valide your email.")
 			return redirect(login_page)
 
 	context = {'form': form}
 	return render(request, 'movies/registration_page.html', context)
 
+
+def activation_page(request, uid, token):
+	user_id = urlsafe_base64_decode(uid)
+	user = User.objects.get(id = user_id)
+	if user and registration_activation_token.check_token(user, token):
+		user.is_active = True
+		user.save()
+		login(request, user)
+		return redirect(list_movies)
 
 def second_registration_page(request):
 	form = SecondCreateUserForm()
