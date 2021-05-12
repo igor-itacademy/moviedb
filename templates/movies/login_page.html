@@ -20,6 +20,17 @@
 	            {% render_field form.password class="form-control" %}
 	          </div>
 	        </div>
+	        {% if messages %}
+	        <div class="row align-items-center mb-4">
+	        	<div class="col">
+	        		{% for message in messages %}
+	        		<div class="alert alert-info" role="alert">
+        		 		{{message}}
+        			</div>
+        			{% endfor %}
+	        	</div>
+	        </div>
+	        {% endif %}
 	        {% if form.errors %}
 	        <div class="row align-items-center mt-4">
 	        	<div class="col">

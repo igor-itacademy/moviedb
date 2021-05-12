@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from django.contrib import messages
 
 def users_list(request):
 	all_users = User.objects.all()
@@ -19,8 +20,22 @@ def registration_page(request):
 	if request.method == 'POST':
 		form = CreateUserForm(request.POST)
 		if form.is_valid():
-			form.save()
-			return redirect(list_movies)
+			user = form.save(commit=False)
+			user.is_active = False
+			email_to = user.email
+			name = user.username
+			email_template =render_to_string('users/confirmation_email.html', {'name': name})
+			email = EmailMessage(
+				'Подтвердите регистрацию',
+				email_template,
+				'from@example.com',
+				[email_to],
+			)
+			email.fail_silently=False
+			email.send()
+			user.save()
+			messages.info(request, "Please valide your email.")
+			return redirect(login_page)
 
 	context = {'form': form}
 	return render(request, 'movies/registration_page.html', context)
