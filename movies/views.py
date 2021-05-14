@@ -10,6 +10,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .tokens import registration_activation_token
+from django.conf import settings
 
 
 def users_list(request):
@@ -40,9 +41,10 @@ def registration_page(request):
 			email = EmailMessage(
 				'Подтвердите регистрацию',
 				email_template,
-				'from@example.com',
+				settings.EMAIL_HOST_USER,
 				[email_to],
 			)
+			email.content_subtype = 'html'
 			email.fail_silently=False
 			email.send()
 			messages.info(request, "Please valide your email.")
@@ -103,14 +105,14 @@ def contact_page(request):
 	if request.method == 'POST':
 		form = ContactUsForm(request.POST)
 		if form.is_valid():
-			sender_email = form.cleaned_data['sender_email']
+			email_to = form.cleaned_data['email_to']
 			sender_name = form.cleaned_data['sender_name']
 			email_template =render_to_string('users/contact_form_email_answer.html', {'sender_name': sender_name})
 			email = EmailMessage(
 				'Спасибо за отзыв',
 				email_template,
-				'from@example.com',
-				[sender_email],
+				settings.EMAIL_HOST_USER,
+				[email_to],
 			)
 			email.fail_silently=False
 			email.send()
