@@ -124,5 +124,3 @@ def contact_page(request):
 def list_movies(request):
 	context = {}
 	return render(request, 'movies/list_movies.html', context)
-
-
