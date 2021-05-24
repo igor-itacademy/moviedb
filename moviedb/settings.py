@@ -130,6 +130,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR/'media'
+
+
 
 # SMTP config
 load_dotenv()
