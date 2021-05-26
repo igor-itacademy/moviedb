@@ -1,0 +1,21 @@
+{% extends "_base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+<form action="" method = 'POST'>
+	{% csrf_token %}
+
+	<div class="row align-items-center">
+	    <div class="col-6 mt-4">
+	        {% render_field form.bio class="form-control" rows="3" cols="5" %}
+	    </div>
+	</div>
+	
+	<div class="row align-items-center">
+	    <div class="col-4 mt-4">
+	        {% render_field form.photo class="form-control" %}
+	    </div>
+	</div>
+	<input type="submit" value="Сохранить">
+
+</form>
+{% endblock content %} 

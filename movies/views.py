@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import CreateUserForm, SecondCreateUserForm, LoginForm, ContactUsForm
+from .forms import CreateUserForm, SecondCreateUserForm, LoginForm, ContactUsForm, EditProfileForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -124,3 +124,14 @@ def contact_page(request):
 def list_movies(request):
 	context = {}
 	return render(request, 'movies/list_movies.html', context)
+
+@login_required(login_url='login_page')
+def edit_profile(request):
+	print(request.user)
+	form = EditProfileForm()
+	if request.method == 'POST':
+		form = EditProfileForm(request.POST)
+		if form.is_valid():
+			pass
+	context = {'form':form}
+	return render(request, 'users/edit_profile.html', context)
