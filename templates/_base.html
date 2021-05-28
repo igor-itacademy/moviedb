@@ -23,7 +23,7 @@
 	      </li>
 	      {% if user.is_authenticated %}
 	      <li class="nav-item">
-	        <a href="" class="nav-link">
+	        <a href="{% url 'edit_profile' %}" class="nav-link">
 	        	<img src="{{user.profile.photo.url}}" class="avatar" alt="">
 	        </a>
 	      </li> 

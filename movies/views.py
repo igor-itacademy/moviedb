@@ -128,10 +128,15 @@ def list_movies(request):
 @login_required(login_url='login_page')
 def edit_profile(request):
 	print(request.user)
-	form = EditProfileForm()
+	form = EditProfileForm(instance=request.user.profile)
 	if request.method == 'POST':
-		form = EditProfileForm(request.POST)
+		form = EditProfileForm(
+			request.POST,
+			request.FILES,
+			instance=request.user.profile)
 		if form.is_valid():
-			pass
+			form.save()
+			return redirect('list_movies')
+			
 	context = {'form':form}
 	return render(request, 'users/edit_profile.html', context)
