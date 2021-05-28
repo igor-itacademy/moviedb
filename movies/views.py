@@ -127,7 +127,6 @@ def list_movies(request):
 
 @login_required(login_url='login_page')
 def edit_profile(request):
-	print(request.user)
 	form = EditProfileForm(instance=request.user.profile)
 	if request.method == 'POST':
 		form = EditProfileForm(

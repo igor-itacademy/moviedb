@@ -2,6 +2,8 @@ from django.test import TestCase, Client
 from django.urls import reverse, resolve
 from django.contrib.auth.views import PasswordResetView
 from unittest import skip
+from django.contrib.auth.models import User
+from .models import Profile
 from .views import list_movies, activation_page
 
 
@@ -28,10 +30,27 @@ class URLTests(TestCase):
 
 
 class TestViews(TestCase):
+	def setUp(self):
+		self.client = Client()
+
 	def test_users_list(self):
-		client = Client()
 		url = reverse('users_list')
-		response = client.get(url)
+		response = self.client.get(url)
 
 		self.assertEqual(response.status_code, 200)
 		self.assertTemplateUsed(response, 'users/user_list.html')
+
+	# test fails 
+	def test_edit_profile_POST(self):
+		user = User.objects.create_user(username='uniqueusername',
+			email='unique@mail.com',
+			password='somepassword123')
+		profile = Profile.objects.create(user=user)
+
+		url = reverse('edit_profile')
+		data = {'bio': 'hello'}
+		self.client.login(username=user.username, password='somepassword123')
+		response = self.client.post(url, data)
+		self.assertEqual(response.status_code, 302)
+		self.assertEqual(profile.bio, 'hello')
+
