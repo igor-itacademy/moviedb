@@ -6,6 +6,8 @@ from django.conf import settings
 from .forms import ContactUsForm, CommentForm
 from .models import Comment, Movie
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+
 
 
 def users_list(request):
@@ -53,6 +55,8 @@ def movie_detail(request, id):
 	}
 	return render(request, 'movies/movie_detail.html', context)
 
+	
+@login_required(login_url='login_page')
 def add_comment(request, id):
 	if request.method == 'POST':
 		movie = Movie.objects.get(id=id)
