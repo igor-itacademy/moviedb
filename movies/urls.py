@@ -8,7 +8,7 @@ urlpatterns = [
     path('contact_page/', contact_page, name='contact_page'),
     path('', list_movies, name='list_movies'),
     path('movie/<id>', movie_detail, name='movie_detail'),
-    path('add_comment/', add_comment, name='add_comment'),
+    path('add_comment/<id>', add_comment, name='add_comment'),
 ]
 
 

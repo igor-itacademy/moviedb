@@ -53,19 +53,18 @@ def movie_detail(request, id):
 	}
 	return render(request, 'movies/movie_detail.html', context)
 
-def add_comment(request):
-	form = CommentForm()
-	# print(request.POST.get('text'))
-	movie_id = int(request.POST.get('movie_id'))
-	
-
+def add_comment(request, id):
 	if request.method == 'POST':
+		movie = Movie.objects.get(id=id)
+		user = request.user
+		form = CommentForm(request.POST)
 		if form.is_valid():
-			form.save(commit=False)
-			form.movie = movie_id
-			form.text = request.POST.get('text')
-			form.user = request.user.id
+			form = form.save(commit=False)
 			if request.POST.get('parent', None):
-				form.parent_id = int(request.POST.get('parent'))
+				form.parent_id = request.POST.get('parent')
+			form.movie = movie
+			form.user = user
 			form.save()
-	return redirect(reverse('movie_detail', kwargs={'id': movie_id}))
+
+			return redirect(movie. get_absolute_url())
+
