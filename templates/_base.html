@@ -38,8 +38,10 @@
 	      </li>   
 	      <li class="nav-item">
 	        <a class="nav-link" href="{% url 'registration_page' %}">Регистрация </a>
-	      </li>         
+	      </li>
+
 	      {% endif %}
+	      <li class="nav-item"><a href="{% url 'users_list' %}">Список пользователей</a></li>
 	    </ul>
 	  </div>
 	</nav>

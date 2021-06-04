@@ -12,7 +12,7 @@
 	</div>
 	<div class="row">
 		<div class="col mb-4">
-			{% if user.is_authenticated %}
+			
 			<form action="{% url 'add_comment' movie.id %}" method="post" id="formComment" class="form-control">
 				{% csrf_token %}
 				<input type="hidden" name="parent" value="" id="commentparent">
@@ -20,22 +20,20 @@
 				
 				<button type="submit" class="btn btn-info">Оставить коммент</button>
 			</form>
-			{% else %}
-				Логин или регистрация
-			{% endif %}
+			
 			{% for comment in movie.get_comments %}
 			<div class="parent_comment">
 			<span class="badge bg-secondary">{{comment.user.username}}</span>
 				<p>{{comment.text}}</p>
-				{% if user.is_authenticated %}
-				<a href="#formComment" onclick="addComment('{{comment.user.username}}', '{{comment.id}}')" class="btn btn-sm btn-info">Ответить</a>{% endif %}
+				
+				<a href="#formComment" onclick="addComment('{{comment.user.username}}', '{{comment.id}}')" class="btn btn-sm btn-info">Ответить</a>
 			</div>
 				{% for child in comment.comment_set.all %}
 			<div class="child_comment">
 			<span class="badge bg-secondary">{{child.user.username}}</span>
 				<p>{{child.text}}</p>
-				{% if user.is_authenticated %}
-				<a href="#formComment" onclick="addComment('{{child.user.username}}', '{{comment.id}}')" class="btn btn-sm btn-info">Ответить</a>{% endif %}
+				
+				<a href="#formComment" onclick="addComment('{{child.user.username}}', '{{comment.id}}')" class="btn btn-sm btn-info">Ответить</a>
 			</div>
 				{% endfor %}
 			{% endfor %}

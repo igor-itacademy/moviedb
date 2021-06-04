@@ -4,16 +4,17 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.conf import settings
 from .forms import ContactUsForm, CommentForm
-from .models import Comment, Movie
+from .models import Comment, Movie, Profile
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
 
-
 def users_list(request):
-	all_users = User.objects.all()
+	
+	profiles = Profile.objects.select_related('user')
+	# profiles = Profile.objects.all()
 	context = {
-		'all_users': all_users
+		'profiles': profiles
 	}
 	return render(request, 'users/user_list.html', context)
 
@@ -47,7 +48,8 @@ def list_movies(request):
 
 def movie_detail(request, id):
 	movie = Movie.objects.get(id=id)
-	comments = Comment.objects.filter(movie=movie)
+	# comments = Comment.objects.filter(movie=movie)
+	comments = Comment.objects.select_related('user')
 	
 	context = {
 		'movie': movie,
@@ -55,7 +57,7 @@ def movie_detail(request, id):
 	}
 	return render(request, 'movies/movie_detail.html', context)
 
-	
+
 @login_required(login_url='login_page')
 def add_comment(request, id):
 	if request.method == 'POST':

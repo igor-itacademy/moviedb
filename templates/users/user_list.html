@@ -3,9 +3,13 @@
 {% block content %}
 	<h2> Users list page</h2>
 	<ul>
-	{% for user in all_users %}
-		<li>{{user.username}}</li>
+
+	{% for profile in profiles %}
+		{{profile.bio}}
+		{{profile.user.username}}
+		
 	{% endfor %}
 	</ul>
 	<a href="/logout">logout</a>
+		
 {% endblock content %}

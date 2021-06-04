@@ -41,9 +41,11 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'django.contrib.staticfiles',
     'movies',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -145,3 +147,9 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER')
 # https://myaccount.google.com/lesssecureapps?pli=1
+
+INTERNAL_IPS = [
+
+    '127.0.0.1',
+
+]

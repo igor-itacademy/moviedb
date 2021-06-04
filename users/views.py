@@ -58,7 +58,7 @@ def activation_page(request, uid, token):
 		user.is_active = True
 		user.save()
 		login(request, user)
-		return redirect(list_movies)
+		return redirect('list_movies')
 
 def second_registration_page(request):
 	form = SecondCreateUserForm()
@@ -66,7 +66,7 @@ def second_registration_page(request):
 		form = SecondCreateUserForm(request.POST)
 		if form.is_valid():
 			form.save()
-			return redirect(list_movies)
+			return redirect('list_movies')
 
 	context = {'form': form}
 	return render(request, 'movies/registration_2.html', context)
@@ -81,7 +81,7 @@ def login_page(request):
 			user = authenticate(username = cd['username'], password = cd['password'])
 			if user is not None:
 				login(request, user)
-				return redirect(list_movies)
+				return redirect('list_movies')
 
 	context = {'form': form}
 	return render(request, 'movies/login_page.html', context)
