@@ -11,13 +11,14 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.conf import settings
 from .tokens import registration_activation_token
 from .forms import CreateUserForm, SecondCreateUserForm, LoginForm,  EditProfileForm
-
+from .decorators import *
 
 @login_required(login_url='login_page')
 def user_comments(request):
 	context = {}
 	return render(request, 'users/user_comments.html', context)
 
+@for_unauthenticated_user
 def registration_page(request):
 	form = CreateUserForm()
 	if request.method == 'POST':
@@ -60,6 +61,7 @@ def activation_page(request, uid, token):
 		login(request, user)
 		return redirect('list_movies')
 
+@for_unauthenticated_user
 def second_registration_page(request):
 	form = SecondCreateUserForm()
 	if request.method == 'POST':
@@ -71,7 +73,7 @@ def second_registration_page(request):
 	context = {'form': form}
 	return render(request, 'movies/registration_2.html', context)
 
-
+@for_unauthenticated_user
 def login_page(request):
 	form = LoginForm()
 	if request.method == 'POST':
