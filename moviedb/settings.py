@@ -68,7 +68,12 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
             ],
+            'libraries':{
+                        'last_films': 'movies.templatetags.last_films',
+
+                        }
         },
     },
 ]
