@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 import os
 from django.urls import reverse
+from PIL import Image
+
 
 def user_image_dir(instance, filename):
 	return os.path.join('avatars', f'{instance.user.id}', filename)
@@ -13,6 +15,12 @@ class Profile(models.Model):
 
 	def __str__(self):
 		return self.user.username
+
+
+	# def save(self, *args, **kwargs):
+	# 	photo = Image.open(self.photo)
+	# 	self.photo = photo.resize(photo, (200, 200))
+	# 	super().save(*args, **kwargs)
 
 
 class Director(models.Model):
