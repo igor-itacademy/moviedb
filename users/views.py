@@ -13,6 +13,8 @@ from .tokens import registration_activation_token
 from .forms import CreateUserForm, SecondCreateUserForm, LoginForm,  EditProfileForm
 from .decorators import *
 
+from .tasks import send_activation_email
+
 @login_required(login_url='login_page')
 def user_comments(request):
 	context = {}
@@ -26,25 +28,14 @@ def registration_page(request):
 		if form.is_valid():
 			user = form.save(commit=False)
 			user.is_active = False
-			email_to = user.email
-			name = user.username
+			user_email = user.email
+			user_pk = urlsafe_base64_encode(force_bytes(user.pk))
+			username = user.username
+			token = registration_activation_token.make_token(user)
+			# name = user.username
 			user.save()
-			email_template =render_to_string('users/confirmation_email.html', 
-				{
-					'name': name,
-					'domain': get_current_site(request).domain,
-					'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-					'token': registration_activation_token.make_token(user),
-				})
-			email = EmailMessage(
-				'Подтвердите регистрацию',
-				email_template,
-				settings.EMAIL_HOST_USER,
-				[email_to],
-			)
-			email.content_subtype = 'html'
-			email.fail_silently=False
-			email.send()
+			domain = get_current_site(request).domain
+			send_activation_email.delay(username, user_pk, user_email, token, domain)
 			messages.info(request, "Please valide your email.")
 			return redirect(login_page)
 

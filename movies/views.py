@@ -7,7 +7,7 @@ from .forms import ContactUsForm, CommentForm
 from .models import Comment, Movie, Profile
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .tasks import add
+from .tasks import add, send_contact_email
 
 def users_list(request):
 	
@@ -26,15 +26,16 @@ def contact_page(request):
 		if form.is_valid():
 			email_to = form.cleaned_data['email_to']
 			sender_name = form.cleaned_data['sender_name']
-			email_template =render_to_string('users/contact_form_email_answer.html', {'sender_name': sender_name})
-			email = EmailMessage(
-				'Спасибо за отзыв',
-				email_template,
-				settings.EMAIL_HOST_USER,
-				[email_to],
-			)
-			email.fail_silently=False
-			email.send()
+			# email_template =render_to_string('users/contact_form_email_answer.html', {'sender_name': sender_name})
+			# email = EmailMessage(
+			# 	'Спасибо за отзыв',
+			# 	email_template,
+			# 	settings.EMAIL_HOST_USER,
+			# 	[email_to],
+			# )
+			# email.fail_silently=False
+			# email.send()
+			send_contact_email.delay(email_to, sender_name)
 			return redirect('list_movies')
 	context = {'form': form}
 	return render(request, 'users/contact_page.html', context)
