@@ -7,7 +7,7 @@ from .forms import ContactUsForm, CommentForm
 from .models import Comment, Movie, Profile
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-
+from .tasks import add
 
 def users_list(request):
 	
@@ -42,6 +42,8 @@ def contact_page(request):
 
 def list_movies(request):
 	movies = Movie.objects.all()
+	# При переходе на эту страницу добавляется фоновая задача
+	# add.delay(100, 200)
 	context = {'movies': movies}
 	return render(request, 'movies/list_movies.html', context)
 
