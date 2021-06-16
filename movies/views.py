@@ -8,6 +8,7 @@ from .models import Comment, Movie, Profile
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from .tasks import add, send_contact_email
+from django.core.paginator import Paginator,PageNotAnInteger, EmptyPage
 
 def users_list(request):
 	
@@ -42,7 +43,18 @@ def contact_page(request):
 
 
 def list_movies(request):
-	movies = Movie.objects.all()
+	movies_list = Movie.objects.all()
+	paginator = Paginator(movies_list, 1)
+
+	page = request.GET.get('page')
+
+	try:
+		movies = paginator.page(page)
+	except PageNotAnInteger:
+		movies = paginator.page(1)
+	except EmptyPage:
+		movies = paginator.page(paginator.num_pages)
+
 	# При переходе на эту страницу добавляется фоновая задача
 	# add.delay(100, 200)
 	context = {'movies': movies}

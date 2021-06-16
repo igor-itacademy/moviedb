@@ -29,7 +29,8 @@ def registration_page(request):
 			user = form.save(commit=False)
 			user.is_active = False
 			user_email = user.email
-			user_pk = urlsafe_base64_encode(force_bytes(user.pk))
+			user_pk = urlsafe_base64_encode(force_bytes(user.
+				pk))
 			username = user.username
 			token = registration_activation_token.make_token(user)
 			# name = user.username

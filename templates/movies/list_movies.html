@@ -2,5 +2,62 @@
 {% load last_films %}
 
 {% block content %}
-	{% last_three_films %}
+	{# {% last_three_films %} #}
+	{% for movie in movies %}
+		<h1>{{ movie.name }}</h1>
+		<h4>{{ movie.director }}</h4>
+		<p>{{ movie.description|truncatewords:5 }}</p>
+	{% endfor %}
+	
+{# pagination #}
+	<nav aria-label="...">
+  <ul class="pagination">
+  	{% if movies.has_previous %}
+  		<li class="page-item">
+  			<a class="page-link" href="?page={{ movies.previous_page_number }}">Пред</a>
+  		</li>
+  	{% else %}
+  		<li class="page-item disabled">
+  			<a class="page-link" href="" tabindex="-1">Пред</a>
+  		</li>
+  	{% endif %}
+
+  	{% if movies.number|add:'-3' > 1 %}
+  		<li class="page-item">
+  			<a class="page-link" href="?page={{movies.number|add:'-3'}}">&hellip;</a>
+  		</li>
+  	{% endif %}
+
+  	{% for i in movies.paginator.page_range %}
+  		{% if movies.number == i %}
+  			<li class="page-item active" aria-current="page">
+      		<span class="page-link">{{i}}</span>
+    		</li>
+
+    	{% elif i > movies.number|add:'-3' and  i < movies.number|add:'3' %}
+    		<li class="page-item">
+    			<a class="page-link" href="?page={{i}}">{{i}}</a>
+    		</li>
+  		{% endif %}
+  		
+  	{% endfor %}
+    {% if movies.paginator.num_pages > movies.number|add:'1' %}
+    	<li class="page-item">
+    		<a class="page-link" href="?page={{movies.number|add:'2'}}">&hellip;</a>
+    	</li>
+    	
+    {% endif %}
+
+    {% if movies.has_next %}
+    	<li class="page-item">
+    		<a class="page-link" href="?page={{movies.next_page_number}}">След</a>
+    	</li>
+    {% else %}
+    	<li class="page-item disabled">
+    		<a class="page-link" href="#" tabindex="-1">След</a>
+    	</li>
+    {% endif %}
+  </ul>
+</nav>
+{# end pagination #}
 {% endblock content %}
